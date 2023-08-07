@@ -42,6 +42,11 @@ ArvB* arvB_cria()
     return raiz;
 };
 
+void split()
+{
+    return;
+}
+
 int arvB_insere(ArvB* raiz, int valor)
 {
     if(raiz == NULL)
@@ -66,9 +71,17 @@ int arvB_insereR(ArvB no, int valor)
                 no->chaves[j + 1] = no->chaves[j];   // move-se as demais chaves para deixar
             no->chaves[i] = valor;                   // essa posição desocupada.
         }
-        else if(i == ordem)
+        else if(i < ordem && no->qnt_chaves == ordem - 1 && no->filhos[i] != NULL)
         {
-            
+            arvB_insereR(no->filhos[i], valor);
+        }
+        else if(i == ordem && no->filhos[ordem - 1] != NULL)
+        {
+            arvB_insereR(no->filhos[ordem - 1], valor);
+        }
+        else
+        {
+
         }
     }
 }
