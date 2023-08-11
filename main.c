@@ -1,29 +1,71 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "ArvoreBEstrela.h"
 
-int main() {
-    // Criando uma árvore B com 3 chaves, todas inicializadas como -1 e filhos igual a NULL
-    ArvB* minhaArvore = arvB_cria();
+int main()
+{
+    ArvB *minhaArvore = arvB_cria();
 
-    // Verificando se a árvore foi criada corretamente
-    if (minhaArvore == NULL || *minhaArvore == NULL) {
-        printf("Falha ao criar a arvore!\n");
-        return 1;
-    }
+    imprime(minhaArvore);
 
-    // Acessando as chaves da árvore
-    int i;
+    arvB_insere(minhaArvore, 1);
 
-    printf("Quantidade de chaves: %d\n", (*minhaArvore)->qnt_chaves);
-    printf("Chaves: ");
-    for (i = 0; i < ordem - 1; i++) {
-        printf("%d ", (*minhaArvore)->chaves[i]);
-    }
-    printf("\n");
+    imprime(minhaArvore);
 
-    // Lembre-se de liberar a memória alocada para a árvore quando não for mais necessária
-    // Coloque isso após ter terminado de usar a árvore e não precisar mais dela
+    arvB_insere(minhaArvore, 10);
+
+    imprime(minhaArvore); 
+
+    arvB_insere(minhaArvore, 20);
+
+    imprime(minhaArvore); 
+
+    arvB_insere(minhaArvore, 30);
+
+    imprime(minhaArvore); 
+
+    arvB_insere(minhaArvore, 40);
+
+    imprime(minhaArvore); 
+
+    arvB_insere(minhaArvore, 60);
+
+    imprime(minhaArvore); 
+
+    arvB_insere(minhaArvore, 50);
+
+    imprime(minhaArvore); 
+
+    arvB_insere(minhaArvore, 80);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 2);
+
+    imprime(minhaArvore);
     
+    arvB_insere(minhaArvore, 51);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 21);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 61);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 31);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 41);
+
+    imprime(minhaArvore);
+
+    //printf("%d", (*minhaArvore)->chaves[0]);
+
     arvB_destroi(minhaArvore);
 
     return 0;
