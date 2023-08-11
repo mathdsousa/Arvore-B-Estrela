@@ -15,12 +15,15 @@ struct NO
 };
 
 ArvB* arvB_cria();
+void arvB_criaNO()
 void arvB_destroi(ArvB *raiz);
-int arvB_insere(ArvB* raiz, int valor);
+// int arvB_insere(ArvB* raiz, int valor);
 int arvB_remove(ArvB *raiz, int valor);
 int arvB_busca(ArvB *raiz, int valor);
 int arvB_qtd_nos(ArvB *raiz);
 int arvB_qtd_chaves(ArvB *raiz);
 void arvB_destroiNo(ArvB no);
+void imprime(ArvB *raiz);
+void imprimeNO(ArvB no);
 
 #endif
