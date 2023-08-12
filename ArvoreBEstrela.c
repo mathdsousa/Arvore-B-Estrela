@@ -19,6 +19,7 @@ ArvB* arvB_cria()
     free(raiz);
     return NULL;
 }
+//tchgvghv
 
 void arvB_criaNO(ArvB *no)
 {
