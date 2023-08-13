@@ -22,7 +22,7 @@ void arvB_destroiNO(ArvB no);
 int arvB_insere(ArvB* raiz, int valor);
 ArvB* split(ArvB* no, int valor);
 int arvB_remove(ArvB *raiz, int valor);
-int arvB_busca(ArvB *raiz, int valor);
+ArvB* arvB_busca(ArvB raiz, int valor);
 int arvB_qtd_nos(ArvB *raiz);
 int arvB_qtd_chaves(ArvB *raiz);
 void imprime(ArvB* raiz);

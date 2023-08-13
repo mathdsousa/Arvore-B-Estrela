@@ -174,14 +174,41 @@ int arvB_remove(ArvB *no, int valor)
     
 }
 
-int arvB_busca(ArvB *raiz, int valor)
+ArvB* arvB_busca(ArvB raiz, int valor)
 {
-    
+    if (raiz == NULL) {
+        return NULL; // Key not found
+    }
+
+    int i = 0;
+    while (i < raiz->qnt_chaves && valor > raiz->chaves[i]) {
+        i++;
+    }
+
+    if (i < raiz->qnt_chaves && valor == raiz->chaves[i]) {
+        return raiz; // Chave encontrad
+    } else if (raiz->filhos == NULL) {
+        return NULL; // Chave nao foi encontrada
+    } else {
+        return search_recursive(&(raiz->filhos[i]), valor); //procura recursivamente
+    }
 }
+    
 
 int arvB_qtd_nos(ArvB *raiz)
 {
-    
+    if (raiz == NULL) {
+        return 0;
+    }
+
+    int count = 1; // inicializa o contador + a propria raiz
+    ArvB aux= raiz;
+    int aux1 = aux->qnt_chaves;
+    for (int i = 0; i <= aux1; i++) {
+        //erro na linha 209, descomentar
+//        count += arvB_qtd_nos(raiz->filhos[i]); // chama a recursao
+    }
+    return count;
 }
 
 int arvB_qtd_chaves(ArvB *raiz)
