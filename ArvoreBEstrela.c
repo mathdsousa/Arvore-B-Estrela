@@ -206,7 +206,7 @@ int arvB_qtd_nos(ArvB *raiz)
     ArvB aux= raiz;
     int aux1 = aux->qnt_chaves;
     for (int i = 0; i <= aux1; i++) {
-        //erro na linha 209, descomentar
+        //erro na linha 209, possivelmente
         count += arvB_qtd_nos(aux->filhos[i]); // chama a recursao
     }
     return count;
@@ -214,7 +214,19 @@ int arvB_qtd_nos(ArvB *raiz)
 
 int arvB_qtd_chaves(ArvB *raiz)
 {
-    
+    if (raiz == NULL) {
+        return 0;
+    }
+
+    ArvB aux= raiz;
+    int aux1 = aux->qnt_chaves;
+    int count = aux1; // inicializa o contador + qnt de chaves no noh
+    for (int i = 0; i <= aux1; i++) {
+        //erro na linha 226, possivelmente
+        count += arvB_qtd_nos(aux->filhos[i]); // chama a recursao
+    }
+    return count;
+
 }
 
 void imprime(ArvB* raiz)
