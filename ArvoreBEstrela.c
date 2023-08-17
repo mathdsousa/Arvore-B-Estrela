@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include "ArvoreBEstrela.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 ArvB* arvB_cria()
 {
@@ -43,42 +43,41 @@ void arvB_criaNO(ArvB *no)
         printf("Criou no\n");
 }
 
-int arvB_destroi(ArvB *raiz)
+int arvB_destroi(ArvB* raiz)
+{
+    if(raiz == NULL)
+        return 0;
+    arvB_destroiNO(raiz);
+    free(raiz);
+    return 1;
+}
+
+void arvB_destroiNO(ArvB* no)
 {  
     if(DEBUG)
         printf("Entrou no destroi\n");
-    if(raiz != NULL)
+    if(no == NULL || no == NULL)
     {
-        arvB_destroiNO(*raiz);
-        free(raiz);
         if(DEBUG)
-            printf("Destruiu\n");
-        return 1;
+            printf("O destrói deu errado\n");
+        return; 
     }
+
+    int i = 0, result = 0;
+
+    while(i <= (*no)->qnt_chaves && (*no)->filhos[0] != NULL)
+        result = arvB_destroi(&(*no)->filhos[i++]);
+
     if(DEBUG)
-        printf("O destrói deu errado\n");
-    return -1; 
+        printf("Desalocando memoria\n");
+
+    free((*no)->chaves);
+    free((*no)->filhos);
+    free(*no);
+
+    if(DEBUG)
+        printf("Destroi deu certo\n");
 }
-
-int arvB_destroiNO(ArvB *raiz)
-{
-    if (raiz == NULL || *(raiz) == NULL) {
-        return 0;
-    }
-
-    int result = 0;
-
-    ArvB aux= *raiz;
-    int aux1 = aux->qnt_chaves;
-    for (int i = 0; i <= aux1; i++) 
-    {
-        result = arvB_destroiNO(&(aux->filhos[i]));
-        free(aux->filhos);
-    }
-    free(&raiz);
-    return count;
-}
-
 
 int arvB_insere(ArvB* no, int valor)
 {
@@ -167,7 +166,7 @@ ArvB* split(ArvB *no, int valor)
     (*novoNOPai)->filhos[0] = (*novoNO1);
     (*novoNOPai)->filhos[1] = (*novoNO2);
 
-    arvB_destroi(no);
+    arvB_destroiNO(no);
 
     return novoNOPai;
 }

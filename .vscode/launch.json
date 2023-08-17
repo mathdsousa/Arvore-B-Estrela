@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/mathe/Federal/TerceiroPeriodo/ORI/ArvoreBEstrela",
-      "program": "c:/Users/mathe/Federal/TerceiroPeriodo/ORI/ArvoreBEstrela/build/Debug/outDebug",
+      "cwd": "c:/Users/mathe/Federal/TerceiroPeriodo/ORI/ArvoreBEstrela/Arvore-B-Estrela",
+      "program": "c:/Users/mathe/Federal/TerceiroPeriodo/ORI/ArvoreBEstrela/Arvore-B-Estrela/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
