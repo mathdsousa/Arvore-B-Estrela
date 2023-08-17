@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include "ArvoreBEstrela.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 ArvB* arvB_cria()
 {
@@ -176,7 +176,7 @@ int arvB_remove(ArvB *no, int valor)
 
 int arvB_busca(ArvB* raiz, int valor)
 {
-    if (raiz == NULL) {
+    if (raiz == NULL || *raiz == NULL) {
         return 0; // Key not found
     }
     ArvB aux;
@@ -192,11 +192,11 @@ int arvB_busca(ArvB* raiz, int valor)
     } else if (aux->filhos == NULL) {
         return 0; // Chave nao foi encontrada
     } else {
-        return arvB_busca(aux->filhos[i], valor); //procura recursivamente
+        return arvB_busca(&(aux->filhos[i]), valor); //procura recursivamente
     }
 }
     
-
+/*
 int arvB_qtd_nos(ArvB *raiz)
 {
     if (raiz == NULL) {
@@ -211,8 +211,8 @@ int arvB_qtd_nos(ArvB *raiz)
         count += arvB_qtd_nos(aux->filhos[i]); // chama a recursao
     }
     return count;
-}
-
+}*/
+/*
 int arvB_qtd_chaves(ArvB *raiz)
 {
     if (raiz == NULL) {
@@ -228,7 +228,7 @@ int arvB_qtd_chaves(ArvB *raiz)
     }
     return count;
 
-}
+}*/
 
 void imprime(ArvB* raiz)
 {
