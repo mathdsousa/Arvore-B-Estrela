@@ -196,39 +196,39 @@ int arvB_busca(ArvB* raiz, int valor)
     }
 }
     
-/*
 int arvB_qtd_nos(ArvB *raiz)
 {
-    if (raiz == NULL) {
+    if (raiz == NULL || *(raiz) == NULL) {
         return 0;
     }
 
     int count = 1; // inicializa o contador + a propria raiz
-    ArvB aux= raiz;
+    ArvB aux= *raiz;
     int aux1 = aux->qnt_chaves;
     for (int i = 0; i <= aux1; i++) {
         //erro na linha 209, possivelmente
-        count += arvB_qtd_nos(aux->filhos[i]); // chama a recursao
+        count += arvB_qtd_nos(&(aux->filhos[i])); // chama a recursao
     }
     return count;
-}*/
-/*
+}
+
+
 int arvB_qtd_chaves(ArvB *raiz)
 {
-    if (raiz == NULL) {
+    if (raiz == NULL|| *raiz == NULL) {
         return 0;
     }
 
-    ArvB aux= &raiz;
+    ArvB aux= *raiz;
     int aux1 = aux->qnt_chaves;
     int count = aux1; // inicializa o contador + qnt de chaves no noh
     for (int i = 0; i <= aux1; i++) {
         //erro na linha 226, possivelmente
-        count += arvB_qtd_chaves(aux->filhos[i]); // chama a recursao
+        count += arvB_qtd_chaves(&(aux->filhos[i])); // chama a recursao
     }
     return count;
 
-}*/
+}
 
 void imprime(ArvB* raiz)
 {
