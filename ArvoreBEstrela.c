@@ -174,12 +174,13 @@ int arvB_remove(ArvB *no, int valor)
     
 }
 
-ArvB* arvB_busca(ArvB* raiz, int valor)
+int arvB_busca(ArvB* raiz, int valor)
 {
     if (raiz == NULL) {
-        return NULL; // Key not found
+        return 0; // Key not found
     }
-    ArvB aux = raiz;
+    ArvB aux;
+    aux = *raiz;
 
     int i = 0;
     while (i < aux->qnt_chaves && valor > aux->chaves[i]) {
@@ -187,11 +188,11 @@ ArvB* arvB_busca(ArvB* raiz, int valor)
     }
 
     if (i < aux->qnt_chaves && valor == aux->chaves[i]) {
-        return raiz; // Chave encontrad
+        return 1; // Chave encontrada
     } else if (aux->filhos == NULL) {
-        return NULL; // Chave nao foi encontrada
+        return 0; // Chave nao foi encontrada
     } else {
-        return search_recursive(aux->filhos[i], valor); //procura recursivamente
+        return arvB_busca(aux->filhos[i], valor); //procura recursivamente
     }
 }
     
@@ -218,12 +219,12 @@ int arvB_qtd_chaves(ArvB *raiz)
         return 0;
     }
 
-    ArvB aux= raiz;
+    ArvB aux= &raiz;
     int aux1 = aux->qnt_chaves;
     int count = aux1; // inicializa o contador + qnt de chaves no noh
     for (int i = 0; i <= aux1; i++) {
         //erro na linha 226, possivelmente
-        count += arvB_qtd_nos(aux->filhos[i]); // chama a recursao
+        count += arvB_qtd_chaves(aux->filhos[i]); // chama a recursao
     }
     return count;
 

@@ -66,6 +66,8 @@ int main()
 
     //printf("%d", (*minhaArvore)->chaves[0]);
 
+    int teste = arvB_busca(minhaArvore, 61);
+    printf("%d\n", teste);
     arvB_destroi(minhaArvore);
 
     return 0;
