@@ -60,22 +60,25 @@ int arvB_destroi(ArvB *raiz)
     return -1; 
 }
 
-void arvB_destroiNO(ArvB no)
+int arvB_destroiNO(ArvB *raiz)
 {
-    if(no != NULL)
-    {
-        if(no->filhos[0] != NULL)
-        {
-            for(int i = 0; i < no->qnt_chaves + 1; i++)
-                arvB_destroiNO(no->filhos[i]);
-             free(no->filhos);
-        }
-        free(no->chaves);
-        free(no);
+    if (raiz == NULL || *(raiz) == NULL) {
+        return 0;
     }
-    if(DEBUG)
-        printf("Destruiu no\n");
+
+    int result = 0;
+
+    ArvB aux= *raiz;
+    int aux1 = aux->qnt_chaves;
+    for (int i = 0; i <= aux1; i++) 
+    {
+        result = arvB_destroiNO(&(aux->filhos[i]));
+        free(aux->filhos);
+    }
+    free(&raiz);
+    return count;
 }
+
 
 int arvB_insere(ArvB* no, int valor)
 {
