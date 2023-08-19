@@ -64,6 +64,10 @@ int main()
 
     imprime(minhaArvore);
 
+    arvB_insere(minhaArvore, 70);
+
+    imprime(minhaArvore);
+    
     //printf("%d", (*minhaArvore)->chaves[0]);
 
     int teste = arvB_busca(minhaArvore, 31);

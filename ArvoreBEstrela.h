@@ -20,6 +20,7 @@ void arvB_criaNO(ArvB *no);
 int arvB_destroi(ArvB *raiz);
 void arvB_destroiNO(ArvB* no);
 int arvB_insere(ArvB* raiz, int valor);
+int arvB_insereNO(ArvB* no, int valor); // Retorna um valor de chave em caso de overflow ou -2 se deu certo;
 ArvB* split(ArvB* no, int valor);
 int arvB_remove(ArvB *raiz, int valor);
 int arvB_busca(ArvB *raiz, int valor);

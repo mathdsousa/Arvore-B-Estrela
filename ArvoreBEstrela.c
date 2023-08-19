@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
 #include "ArvoreBEstrela.h"
 
 #define DEBUG 1
+
+int compareChaves(const void *a, const void *b)
+{
+    return (*(int *)a - *(int *)b);
+}
 
 ArvB* arvB_cria()
 {
@@ -19,7 +25,6 @@ ArvB* arvB_cria()
     free(raiz);
     return NULL;
 }
-//tchgvghv
 
 void arvB_criaNO(ArvB *no)
 {
@@ -82,41 +87,13 @@ void arvB_destroiNO(ArvB* no)
 int arvB_insere(ArvB* no, int valor)
 {
     int i = 0;
-    int aux;
+    int result = 0;
 
     if(no != NULL && (*no)->filhos[0] == NULL) // Rever
     {
-        if((*no)->qnt_chaves < ordem - 1) // Primeiro caso - quando há espaço na folha
-        {
-            while((*no)->chaves[i] < valor && i < (*no)->qnt_chaves){i++;};
-            if(i == (*no)->qnt_chaves) // Insere caso a posição i não esteja ocupada
-            {
-                (*no)->chaves[(*no)->qnt_chaves++] = valor;
-            }
-            else // Reordena e insere caso a posição i já esteja ocupada
-            {
-                for(int j = ordem - 1; j > i; j--)
-                    (*no)->chaves[j] = (*no)->chaves[j - 1];
-                (*no)->chaves[i] = valor;
-                (*no)->qnt_chaves++;   
-            }
-        }
-        else // Segundo caso - quando o nó folha está 100% ocupado - overflow
-        {   
-            if(DEBUG)
-                printf("Entrou nesse else \n");
-            while((*no)->chaves[i] < valor && i < (*no)->qnt_chaves - 1){i++;};
-            aux = (*no)->chaves[ordem - 2]; // Salva o elemento da última posição
-            imprime(no);
-            for(int j = ordem - 1; j > i; j--) // Reordena e insere o valor na posição correta
-                (*no)->chaves[j] = (*no)->chaves[j - 1];
-            (*no)->chaves[i] = valor;  
-            if(DEBUG)
-                printf("Posicao de insercao: %d e valor a ser inserido: %d\n", i, aux);
-            if(DEBUG)
-                imprime(no);
-            *no = (*split(no, aux)); // Além de dividir, deve inserir o aux na primeira posição livre do segundo vetor
-        }
+        result = arvB_insereNO(no, valor);
+        if(result != -1)
+            *no = (*split(no, result)); // Além de dividir, deve inserir o aux na primeira posição livre do segundo vetor
         return 1;
     }
     if((*no)->filhos[0] != NULL) // Caso não esteja em um nó folha, são feitas chamadas recursivas até encontrar um
@@ -134,12 +111,65 @@ int arvB_insere(ArvB* no, int valor)
     return -1;
 }
 
+int arvB_insereNO(ArvB* no, int valor)
+{
+    int i = 0;
+    int aux;
+
+    if((*no)->qnt_chaves < ordem - 1) // Primeiro caso - quando há espaço na folha
+    {
+        while((*no)->chaves[i] < valor && i < (*no)->qnt_chaves){i++;};
+        if(i == (*no)->qnt_chaves) // Insere caso a posição i não esteja ocupada
+        {
+            (*no)->chaves[(*no)->qnt_chaves++] = valor;
+        }
+        else // Reordena e insere caso a posição i já esteja ocupada
+        {
+            for(int j = ordem - 1; j > i; j--)
+                (*no)->chaves[j] = (*no)->chaves[j - 1];
+            (*no)->chaves[i] = valor;
+            (*no)->qnt_chaves++;   
+        }
+        return -1; // Não houve propagação de valor;
+    }
+    
+    if(DEBUG)
+        printf("Houve overflow \n");
+
+
+    // Promoção de chave
+    int* chaves = (int*) malloc(sizeof(int)*ordem);
+
+    for(int j = 0; j < ordem - 1; j++)
+        chaves[j] = (*no)->chaves[j];
+    chaves[ordem - 1] = valor;
+
+    qsort(chaves, ordem, sizeof(int), compareChaves);
+
+    aux = chaves[4];
+
+    if(DEBUG)
+        printf("Chaves promovida: %d\n", aux);
+
+    for(int j = 0; j < ordem - 1; j++)
+    {
+        if (j < 4)
+            (*no)->chaves[j] = chaves[j];
+        else if (j > 4)
+            (*no)->chaves[j - 1] = chaves[j];
+    }
+
+    free(chaves);
+
+    return aux;
+}
+
 ArvB* split(ArvB *no, int valor)
 {
     if(DEBUG)
         printf("Entrou no split, valor: %d\n", valor);
-    int result;
 
+    int result;
     ArvB* novoNO1 = (ArvB*) malloc(sizeof(ArvB));
     ArvB* novoNO2 = (ArvB*) malloc(sizeof(ArvB));
     ArvB* novoNOPai = (ArvB*) malloc(sizeof(ArvB));
@@ -155,13 +185,23 @@ ArvB* split(ArvB *no, int valor)
     for(int i = 0; i < ordem - 1; i++)
     {
         if(i < 4)
-            result = arvB_insere(novoNO1, (*no)->chaves[i]);
-        else if(i > 4)
-            result = arvB_insere(novoNO2, (*no)->chaves[i]);
+        {
+            result = arvB_insereNO(novoNO1, (*no)->chaves[i]);
+            (*novoNO1)->filhos[i] = (*no)->filhos[i];
+        }
+        else
+        {
+            result = arvB_insereNO(novoNO2, (*no)->chaves[i]);
+            (*novoNO2)->filhos[i-4] = (*no)->filhos[i];
+        }
     }
+    imprime(novoNO1);
+    imprime(novoNO2);
 
-    result = arvB_insere(novoNO2, valor);
-    result = arvB_insere(novoNOPai, (*no)->chaves[4]);
+    (*novoNO2)->filhos[3] = (*no)->filhos[ordem - 1];
+    result = arvB_insereNO(novoNOPai, valor);
+
+    imprime(novoNOPai);
 
     (*novoNOPai)->filhos[0] = (*novoNO1);
     (*novoNOPai)->filhos[1] = (*novoNO2);
