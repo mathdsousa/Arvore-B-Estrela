@@ -233,9 +233,7 @@ int arvB_remove(ArvB *no, int valor)
                     aux->chaves[i] = aux->chaves[i+1];
                 }
             }
-//            if(aux->chaves[aux->qnt_chaves-1] == valor){
-//                aux->chaves[aux->qnt_chaves-1] = NULL;
-//           }
+            aux->qnt_chaves--;
         }    
     }
     return 1;
