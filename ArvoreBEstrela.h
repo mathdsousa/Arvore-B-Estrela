@@ -7,7 +7,7 @@
 typedef struct NO* ArvB;
 
 // Definição do Tipo de Nó
-struct NO 
+struct NO
 {
     int qnt_chaves;
     int *chaves; 
@@ -29,5 +29,6 @@ int arvB_qtd_chaves(ArvB *raiz);
 void imprime(ArvB* raiz);
 void imprimeNO(ArvB no, int nivel);
 void promocao(ArvB *no, int posicao, int valor);
+ArvB arvBBuscaRemove(ArvB* raiz, int valor);
 
 #endif

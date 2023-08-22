@@ -212,8 +212,56 @@ ArvB* split(ArvB *no, int valor)
 }
 
 int arvB_remove(ArvB *no, int valor)
-{
-    
+{ 
+    printf("Removendo o numero: %d\n", valor);
+
+    ArvB aux = arvBBuscaRemove(no,valor);
+    printf("testando buscaremove:\n");
+
+    int auxt=ordem+1;
+
+
+    if(*(aux->filhos) == NULL){
+        // caso 1: tirar a FOLHA em um nó com numero maior que o min de chaves
+        if(aux->qnt_chaves > ((ordem/2) -1)){
+           for(int i =0; i<aux->qnt_chaves-1; i++){
+                if(aux->chaves[i] == valor){
+                    auxt =i;
+                    aux->chaves[i] = aux->chaves[i+1];
+                }
+                else if(i > auxt){
+                    aux->chaves[i] = aux->chaves[i+1];
+                }
+            }
+//            if(aux->chaves[aux->qnt_chaves-1] == valor){
+//                aux->chaves[aux->qnt_chaves-1] = NULL;
+//           }
+        }    
+    }
+    return 1;
+
+
+}
+
+ArvB arvBBuscaRemove(ArvB* raiz, int valor){
+    if (raiz == NULL || *raiz == NULL) {
+        return 0; // Key not found
+    }
+    ArvB aux;
+    aux = *raiz;
+
+    int i = 0;
+    while (i < aux->qnt_chaves && valor > aux->chaves[i]) {
+        i++;
+    }
+
+    if (i < aux->qnt_chaves && valor == aux->chaves[i]) {
+        return aux; // Chave encontrada
+    } else if (aux->filhos == NULL) {
+        return 0; // Chave nao foi encontrada
+    } else {
+        return arvBBuscaRemove(&(aux->filhos[i]), valor); //procura recursivamente
+    }
 }
 
 int arvB_busca(ArvB* raiz, int valor)
@@ -237,7 +285,8 @@ int arvB_busca(ArvB* raiz, int valor)
         return arvB_busca(&(aux->filhos[i]), valor); //procura recursivamente
     }
 }
-    
+
+
 int arvB_qtd_nos(ArvB *raiz)
 {
     if (raiz == NULL || *(raiz) == NULL) {

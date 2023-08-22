@@ -79,6 +79,11 @@ int main()
     teste = arvB_qtd_chaves(minhaArvore);
     printf("numero de chaves: %d\n", teste);
 
+    printf("testando remocao\n");
+    teste = arvB_remove(minhaArvore,50);
+    imprime(minhaArvore);
+
+
     arvB_destroi(minhaArvore);
 
     return 0;
