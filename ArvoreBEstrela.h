@@ -30,5 +30,5 @@ void imprime(ArvB* raiz);
 void imprimeNO(ArvB no, int nivel);
 void promocao(ArvB *no, int posicao, int valor);
 ArvB arvBBuscaRemove(ArvB* raiz, int valor);
-
+int verifica_se_raiz(ArvB* raiz, int chave);
 #endif

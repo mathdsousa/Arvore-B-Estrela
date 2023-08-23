@@ -82,7 +82,8 @@ int main()
     printf("testando remocao\n");
     teste = arvB_remove(minhaArvore,50);
     imprime(minhaArvore);
-
+    teste = verifica_se_raiz(minhaArvore,42);
+    printf("se raiz: %d\n",teste);
 
     arvB_destroi(minhaArvore);
 

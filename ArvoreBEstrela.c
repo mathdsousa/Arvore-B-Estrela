@@ -111,7 +111,31 @@ int arvB_insere(ArvB* no, int valor)
     return -1;
 }
 
-void balanceamento(){
+// se for igual a 1, eh raiz
+int verifica_se_raiz(ArvB* raiz, int chave){
+    if (raiz == NULL || *raiz == NULL) {
+        printf("entrou nessa bomba 1\n");
+        return 1; // Key not found
+
+    }
+    ArvB aux;
+    aux = *raiz;
+
+    int i = 0;
+    while (i < aux->qnt_chaves && chave > aux->chaves[i]) {
+        i++;
+    }
+
+    if (i < aux->qnt_chaves && chave == aux->chaves[i]) {
+        printf("achou o valor\n");
+        return 1; // Chave encontrada
+    } else if (aux->filhos == NULL) {
+        printf("descobriu a folha\n");
+        return 1; // Chave nao foi encontrada
+    } else {
+        printf("nenhum dos outros\n");
+        return 1 + verifica_se_raiz(&(aux->filhos[i]), chave); //procura recursivamente
+    }
 
 }
 
