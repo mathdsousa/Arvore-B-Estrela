@@ -111,6 +111,12 @@ int arvB_insere(ArvB* no, int valor)
     return -1;
 }
 
+void balanceamento(){
+
+}
+
+
+
 int arvB_insereNO(ArvB* no, int valor)
 {
     int i = 0;
@@ -211,6 +217,32 @@ ArvB* split(ArvB *no, int valor)
     return novoNOPai;
 }
 
+ArvB pega_no_sucessor(ArvB no, int chave_pai){
+    ArvB aux;
+    aux = no->filhos[chave_pai+1];
+    int booleano =0;
+    while(aux->filhos != NULL){
+        aux = aux->filhos[0];
+    }
+    return aux;
+}
+
+int pega_chave_sucessor(ArvB no, int chave_pai){
+//    int aux;
+ //   aux = no->filhos[chave_pai+1]->chaves[0];
+  //  return aux;
+
+
+    ArvB aux;
+    aux = no->filhos[chave_pai+1];
+    int booleano =0;
+    while(aux->filhos != NULL){
+        aux = aux->filhos[0];
+    }
+    return aux->chaves[0];
+}
+
+
 int arvB_remove(ArvB *no, int valor)
 { 
     printf("Removendo o numero: %d\n", valor);
@@ -234,11 +266,36 @@ int arvB_remove(ArvB *no, int valor)
                 }
             }
             aux->qnt_chaves--;
-        }    
+        }   
     }
+
+    else {
+            //caso 2: no intermediario:
+            // verifica se o filho direito teve underflow
+            int booleano =0;
+            for(int i =0; ((i<aux->qnt_chaves)&(booleano == 0)); i++){
+                if(aux->chaves[i] == valor){
+                    auxt =i;
+                    booleano =1;
+                }
+            }
+            aux->chaves[auxt] = pega_chave_sucessor(aux,auxt);
+            ArvB caso2 = pega_no_sucessor(aux,auxt);
+            if(caso2->qnt_chaves > ((ordem/2) -1)){
+                for(int i =0; i<caso2->qnt_chaves-1; i++){
+                    if(caso2->chaves[i] == valor){
+                        auxt =i;
+                        caso2->chaves[i] = caso2->chaves[i+1];
+                    }
+                    else if(i > auxt){
+                        caso2->chaves[i] = caso2->chaves[i+1];
+                    }
+            }
+                caso2->qnt_chaves--;
+            }    
+            aux->qnt_chaves--;
+        }
     return 1;
-
-
 }
 
 ArvB arvBBuscaRemove(ArvB* raiz, int valor){
