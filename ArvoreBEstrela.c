@@ -85,6 +85,7 @@ void arvB_destroiNO(ArvB* no)
 
 int arvB_insere(ArvB* no, int valor)
 {
+    printf("inserindo: %d\n", valor);
     if(no == NULL)
         return -1;
     int result = arvB_novaInsere(&(*no), valor, 1);
@@ -150,6 +151,9 @@ int arvB_novaInsere(ArvB* no, int valor, int raiz)
 
 int arvB_insereNO(ArvB* no, int valor)
 {
+    if(DEBUG)
+        printf("Valor que esta sendo inserido no insereNO: %d\n", valor);
+
     int i = 0;
     int aux;
 
@@ -214,6 +218,8 @@ void ajustaNO(ArvB* no, int valor, int posicao)
     if(novoNO == NULL)
         return;
 
+    if(DEBUG)
+        printf("Criando no noh no ajustaNO\n");
     arvB_criaNO(novoNO);
     
     for(int i = ordem/2; i < ordem - 1; i++)
@@ -257,18 +263,26 @@ ArvB* split(ArvB *no, int valor)
         return NULL;
     }
 
-    arvB_criaNO(novoNO1); arvB_criaNO(novoNO2); arvB_criaNO(novoNOPai);
+    if(DEBUG)
+        printf("Criando novoNO1\n");
+    arvB_criaNO(novoNO1); 
+    if(DEBUG)
+        printf("Criando novoNO2\n");
+    arvB_criaNO(novoNO2); 
+    if(DEBUG)
+        printf("Criando novoNOPai\n");
+    arvB_criaNO(novoNOPai);
 
     for(int i = 0; i < ordem - 1; i++)
     {
         if(i < ordem/2)
         {
-            result = arvB_insereNO(novoNO1, (*no)->chaves[i]);
+            result = arvB_insere(novoNO1, (*no)->chaves[i]);
             (*novoNO1)->filhos[i] = (*no)->filhos[i];
         }
         else
         {
-            result = arvB_insereNO(novoNO2, (*no)->chaves[i]);
+            result = arvB_insere(novoNO2, (*no)->chaves[i]);
             (*novoNO2)->filhos[i - (ordem/2)] = (*no)->filhos[i];
         }
     }

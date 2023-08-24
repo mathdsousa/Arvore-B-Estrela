@@ -82,8 +82,99 @@ int main()
     printf("testando remocao\n");
     teste = arvB_remove(minhaArvore,50);
     imprime(minhaArvore);
-    teste = verifica_se_raiz(minhaArvore,42);
-    printf("se raiz: %d\n",teste);
+//    teste = verifica_se_raiz(minhaArvore,42);
+//    printf("se raiz: %d\n",teste);
+        arvB_insere(minhaArvore, 48);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 58);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 28);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 18);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 8);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 37);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 22);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 15);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 17);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 25);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 26);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 27);
+
+    imprime(minhaArvore);
+
+        arvB_insere(minhaArvore, 72);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 73);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 74);
+
+    imprime(minhaArvore);
+        arvB_insere(minhaArvore, 75);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 76);
+    imprime(minhaArvore);
+    arvB_insere(minhaArvore, 23);
+
+    imprime(minhaArvore);
+    arvB_insere(minhaArvore,24);
+
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 29);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 3);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 4);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 5);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 6);
+    imprime(minhaArvore);
+
+
+    arvB_insere(minhaArvore, 62);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 63);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 64);
+    imprime(minhaArvore);
+
+    arvB_insere(minhaArvore, 65);
+    imprime(minhaArvore);
 
     arvB_destroi(minhaArvore);
 

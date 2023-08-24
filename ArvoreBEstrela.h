@@ -18,6 +18,7 @@ struct NO
 ArvB* arvB_cria();
 void arvB_criaNO(ArvB *no);
 int arvB_destroi(ArvB *raiz);
+int arvB_novaInsere(ArvB* no, int valor, int raiz);
 void arvB_destroiNO(ArvB* no);
 int arvB_insere(ArvB* raiz, int valor);
 int arvB_insereNO(ArvB* no, int valor); // Retorna um valor de chave em caso de overflow ou -2 se deu certo;
@@ -29,6 +30,7 @@ int arvB_qtd_chaves(ArvB *raiz);
 void imprime(ArvB* raiz);
 void imprimeNO(ArvB no, int nivel);
 void promocao(ArvB *no, int posicao, int valor);
+void ajustaNO(ArvB* no, int valor, int posicao);
 ArvB arvBBuscaRemove(ArvB* raiz, int valor);
-int verifica_se_raiz(ArvB* raiz, int chave);
+//int verifica_se_raiz(ArvB* raiz, int chave);
 #endif
