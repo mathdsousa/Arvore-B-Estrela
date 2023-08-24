@@ -33,7 +33,6 @@ void arvB_criaNO(ArvB *no)
     if(no == NULL)
         return;
 
-    (*no)->pai = NULL;
     (*no)->qnt_chaves = 0;
     (*no)->chaves = (int*) malloc(sizeof(int) * (ordem - 1));
     (*no)->filhos = (ArvB*) malloc(sizeof(ArvB) * ordem);
@@ -86,60 +85,68 @@ void arvB_destroiNO(ArvB* no)
 
 int arvB_insere(ArvB* no, int valor)
 {
-    int i = 0;
-    int result = 0;
+    if(no == NULL)
+        return -1;
+    int result = arvB_novaInsere(&(*no), valor, 1);
+    return 1;
+}
 
-    if(no != NULL && (*no)->filhos[0] == NULL) // Rever
+int arvB_novaInsere(ArvB* no, int valor, int raiz)
+{
+    if(DEBUG)
     {
-        result = arvB_insereNO(no, valor);
-        if(result != -1)
-            *no = (*split(no, result)); // Além de dividir, deve inserir o aux na primeira posição livre do segundo vetor
-        return 1;
+        printf("Entrou na nova insere\n");
+        printf("Eh raiz? %d \n", raiz);
     }
-    if((*no)->filhos[0] != NULL) // Caso não esteja em um nó folha, são feitas chamadas recursivas até encontrar um
+    int i = 0;
+    int result = -1, temp = -1;
+
+    if(*no == NULL) // Verifica se o nó é NULL
+        return 0;
+    
+    if((*no)->filhos[0] == NULL) // Verifica se chegou na folha    
+    {
+        if(DEBUG)
+            printf("Entrou no caso da raiz\n");
+        result = arvB_insereNO(no, valor);
+        if(result != -1 && raiz == 1)
+            *no = (*split(no, result)); 
+    }
+    else // Desce até chegar na raiz
     {
         if(DEBUG)
             printf("Entrou no outro caso \n");
         while((*no)->chaves[i] < valor && i < (*no)->qnt_chaves){i++;};
         if(DEBUG)
             printf("Posicao: %d \n", i);
-        if((*no)->filhos[i]->filhos[0] == NULL && (*no)->filhos[i]->qnt_chaves == ordem - 1)
-            promocao(no, i, valor);
+        temp = arvB_novaInsere(&(*no)->filhos[i], valor, 0); // temp verifica se houve propagação de valor
+    }                                                        // -2 significa que não houve propagação de valor 
 
-        return arvB_insere(&(*no)->filhos[i], valor);
+    if(DEBUG)
+        printf("temp: %d\n", temp);
+
+    if(temp != -1 && raiz == 0) // Isso insere no nó intemediário
+    {
+        if(DEBUG) 
+            printf("Caso do noh intermediario\n");
+        result = arvB_insereNO(no, temp);
     }
-    return -1;
+
+    if(temp != -1 && raiz == 1) // Isso insere no nó raiz e verifica se é preciso o split
+    {
+        if(DEBUG) 
+            printf("Caso do noh raiz na nova insere\n");
+        result = arvB_insereNO(no, temp);
+        if(result != -1)
+            *no = (*split(no, result)); 
+        result = 1;
+    }
+
+    if(DEBUG)
+        printf("Result da insere: %d\n", result);
+
+    return result;
 }
-
-// se for igual a 1, eh raiz
-int verifica_se_raiz(ArvB* raiz, int chave){
-    if (raiz == NULL || *raiz == NULL) {
-        printf("entrou nessa bomba 1\n");
-        return 1; // Key not found
-
-    }
-    ArvB aux;
-    aux = *raiz;
-
-    int i = 0;
-    while (i < aux->qnt_chaves && chave > aux->chaves[i]) {
-        i++;
-    }
-
-    if (i < aux->qnt_chaves && chave == aux->chaves[i]) {
-        printf("achou o valor\n");
-        return 1; // Chave encontrada
-    } else if (aux->filhos == NULL) {
-        printf("descobriu a folha\n");
-        return 1; // Chave nao foi encontrada
-    } else {
-        printf("nenhum dos outros\n");
-        return 1 + verifica_se_raiz(&(aux->filhos[i]), chave); //procura recursivamente
-    }
-
-}
-
-
 
 int arvB_insereNO(ArvB* no, int valor)
 {
@@ -151,11 +158,15 @@ int arvB_insereNO(ArvB* no, int valor)
         while((*no)->chaves[i] < valor && i < (*no)->qnt_chaves){i++;};
         if(i == (*no)->qnt_chaves) // Insere caso a posição i não esteja ocupada
         {
+            if((*no)->filhos[0] != NULL)
+                ajustaNO(no, valor, i);
             (*no)->chaves[(*no)->qnt_chaves++] = valor;
         }
         else // Reordena e insere caso a posição i já esteja ocupada
         {
-            for(int j = ordem - 1; j > i; j--)
+            if((*no)->filhos[0] != NULL)
+                ajustaNO(no, valor, i);
+            for(int j = ordem - 2; j > i; j--)
                 (*no)->chaves[j] = (*no)->chaves[j - 1];
             (*no)->chaves[i] = valor;
             (*no)->qnt_chaves++;   
@@ -166,7 +177,6 @@ int arvB_insereNO(ArvB* no, int valor)
     if(DEBUG)
         printf("Houve overflow \n");
 
-
     // Promoção de chave
     int* chaves = (int*) malloc(sizeof(int)*ordem);
 
@@ -176,22 +186,59 @@ int arvB_insereNO(ArvB* no, int valor)
 
     qsort(chaves, ordem, sizeof(int), compareChaves);
 
-    aux = chaves[4];
+    aux = chaves[ordem/2];
 
     if(DEBUG)
         printf("Chaves promovida: %d\n", aux);
 
-    for(int j = 0; j < ordem - 1; j++)
+    for(int j = 0; j < ordem; j++) // Ajuste feito
     {
-        if (j < 4)
+        if (j < ordem/2)
             (*no)->chaves[j] = chaves[j];
-        else if (j > 4)
+        else if (j > ordem/2)
             (*no)->chaves[j - 1] = chaves[j];
     }
+
+    imprime(no);
 
     free(chaves);
 
     return aux;
+}
+
+void ajustaNO(ArvB* no, int valor, int posicao)
+{   
+    int aux;  
+    ArvB* novoNO = (ArvB*) malloc(sizeof(ArvB));
+
+    if(novoNO == NULL)
+        return;
+
+    arvB_criaNO(novoNO);
+    
+    for(int i = ordem/2; i < ordem - 1; i++)
+    {
+        aux = arvB_insereNO(novoNO, (*no)->filhos[posicao]->chaves[i]); // insere as ultimas chaves do antigo nó no novo;
+        (*no)->filhos[posicao]->chaves[i] == -1; // Atribui -1 para as chaves movidas
+        (*no)->filhos[posicao]->qnt_chaves--; // Decrementa quantidade de chaves nesse nó
+    }
+    for(int i = ordem/2; i < ordem; i++)
+    {
+        (*novoNO)->filhos[ordem/2 - i] = (*no)->filhos[posicao]->filhos[i]; // Move os ponteiros para o novo nó
+        (*no)->filhos[posicao]->filhos[i] = NULL; // Atribui NULL para as posições que o ponteiro foi movido
+    }
+        
+    if((*no)->chaves[posicao] == -1)
+    {
+        (*no)->filhos[posicao + 1] = *novoNO; // Liga o novo nó a esse nó pai;
+
+        return;
+    }
+
+    for(int j = ordem - 1; j > posicao + 1; j--)
+        (*no)->filhos[j] = (*no)->filhos[j - 1];
+
+    (*no)->filhos[posicao + 1] = *novoNO; // Liga o novo nó a esse nó pai;
 }
 
 ArvB* split(ArvB *no, int valor)
@@ -214,7 +261,7 @@ ArvB* split(ArvB *no, int valor)
 
     for(int i = 0; i < ordem - 1; i++)
     {
-        if(i < 4)
+        if(i < ordem/2)
         {
             result = arvB_insereNO(novoNO1, (*no)->chaves[i]);
             (*novoNO1)->filhos[i] = (*no)->filhos[i];
@@ -222,13 +269,14 @@ ArvB* split(ArvB *no, int valor)
         else
         {
             result = arvB_insereNO(novoNO2, (*no)->chaves[i]);
-            (*novoNO2)->filhos[i-4] = (*no)->filhos[i];
+            (*novoNO2)->filhos[i - (ordem/2)] = (*no)->filhos[i];
         }
     }
+
     imprime(novoNO1);
     imprime(novoNO2);
 
-    (*novoNO2)->filhos[3] = (*no)->filhos[ordem - 1];
+    (*novoNO2)->filhos[(ordem/2) - 1] = (*no)->filhos[ordem - 1];
     result = arvB_insereNO(novoNOPai, valor);
 
     imprime(novoNOPai);
@@ -240,32 +288,6 @@ ArvB* split(ArvB *no, int valor)
 
     return novoNOPai;
 }
-
-ArvB pega_no_sucessor(ArvB no, int chave_pai){
-    ArvB aux;
-    aux = no->filhos[chave_pai+1];
-    int booleano =0;
-    while(aux->filhos != NULL){
-        aux = aux->filhos[0];
-    }
-    return aux;
-}
-
-int pega_chave_sucessor(ArvB no, int chave_pai){
-//    int aux;
- //   aux = no->filhos[chave_pai+1]->chaves[0];
-  //  return aux;
-
-
-    ArvB aux;
-    aux = no->filhos[chave_pai+1];
-    int booleano =0;
-    while(aux->filhos != NULL){
-        aux = aux->filhos[0];
-    }
-    return aux->chaves[0];
-}
-
 
 int arvB_remove(ArvB *no, int valor)
 { 
@@ -290,36 +312,11 @@ int arvB_remove(ArvB *no, int valor)
                 }
             }
             aux->qnt_chaves--;
-        }   
+        }    
     }
-
-    else {
-            //caso 2: no intermediario:
-            // verifica se o filho direito teve underflow
-            int booleano =0;
-            for(int i =0; ((i<aux->qnt_chaves)&(booleano == 0)); i++){
-                if(aux->chaves[i] == valor){
-                    auxt =i;
-                    booleano =1;
-                }
-            }
-            aux->chaves[auxt] = pega_chave_sucessor(aux,auxt);
-            ArvB caso2 = pega_no_sucessor(aux,auxt);
-            if(caso2->qnt_chaves > ((ordem/2) -1)){
-                for(int i =0; i<caso2->qnt_chaves-1; i++){
-                    if(caso2->chaves[i] == valor){
-                        auxt =i;
-                        caso2->chaves[i] = caso2->chaves[i+1];
-                    }
-                    else if(i > auxt){
-                        caso2->chaves[i] = caso2->chaves[i+1];
-                    }
-            }
-                caso2->qnt_chaves--;
-            }    
-            aux->qnt_chaves--;
-        }
     return 1;
+
+
 }
 
 ArvB arvBBuscaRemove(ArvB* raiz, int valor){
@@ -410,13 +407,14 @@ void imprimeNO(ArvB no, int nivel)
 {
     if(no != NULL)
     {
+        printf("Nivel %d\n", nivel);
         for(int i = 0; i < nivel; i++)
             printf(" ");
         for(int i = 0; i < no->qnt_chaves; i++)
             printf("%d ", no->chaves[i]);
         printf("\n");
         for(int i = 0; i < no->qnt_chaves + 1; i++)
-            imprimeNO(no->filhos[i], nivel + 3);
+            imprimeNO(no->filhos[i], nivel + 1);
     }
 }
 
